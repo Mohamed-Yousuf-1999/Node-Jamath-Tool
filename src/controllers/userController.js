@@ -18,8 +18,12 @@ exports.getAllUsers = async (req, res) => {
 //Create user
 exports.createUser = async (req, res) => {
   try {
-    const user = await userService.createUser(req.body);
-    res.status(201).json(user);
+    const isCreated = await userService.createUser(req.body);
+    if (isCreated) {
+      res.status(201).json("User Created");
+    } else {
+      res.status(400).json("Failed to create user");
+    }
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
