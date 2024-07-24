@@ -1,5 +1,6 @@
 const UserRepository = require("../repositories/userRepository");
 
+//To calculate age using dob
 const calculateAge = (dob) => {
   const birthDate = new Date(dob);
   const today = new Date();
@@ -20,11 +21,23 @@ exports.getAllUsers = async () => {
 
   const allUsers = users.map((user) => {
     const age = calculateAge(user.dob);
+
+    let pendingAmount = 0;
+    let totalAmount = 0;
+    user.subscriptions.map((subs) => {
+      if (!subs.isPaid) {
+        pendingAmount += subs.amount;
+      }
+      totalAmount += subs.amount;
+    });
+
     return {
       id: user._id,
       name: user.name,
       age: age,
       fatherName: user.fatherName,
+      pendingAmount: pendingAmount,
+      totalAmount: totalAmount,
     };
   });
 
@@ -37,12 +50,16 @@ exports.createUser = async (userData) => {
   return user ? true : false;
 };
 
-// Get user by Id
-exports.getUserById = async (id) => {
-  const user = await UserRepository.getUserById(id);
+// Verify User
+exports.verifyUserExists = async (userId) => {
+  return await UserRepository.verifyUserExists(userId);
+};
 
+// Get user by Id
+exports.getUserById = async (userId) => {
+  const user = await UserRepository.getUserById(userId);
   const userDetail = {
-    id: user._id,
+    userId: user._id,
     name: user.name,
     fatherName: user.fatherName,
     address: user.address,
@@ -97,17 +114,16 @@ exports.getUserById = async (id) => {
     pendingAmount: pendingAmount,
     subscriptions: subscriptions,
   };
-
   return result;
 };
 
 // Update User by Id
-exports.updateUserById = async (id, userData) => {
-  const user = await UserRepository.updateUserById(id, userData);
+exports.updateUserById = async (userId, userData) => {
+  const user = await UserRepository.updateUserById(userId, userData);
   return user ? true : false;
 };
 
 // Delete user by Id
-exports.deleteUserById = async (id) => {
-  return await UserRepository.deleteUserById(id);
+exports.deleteUserById = async (userId) => {
+  return await UserRepository.deleteUserById(userId);
 };

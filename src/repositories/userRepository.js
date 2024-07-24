@@ -10,7 +10,7 @@ exports.createUser = async (userData) => {
     fatherId: userData.fatherId,
     fatherName: userData.fatherName,
     dob: userData.dob,
-    contact: 1234567890,
+    contact: userData.contact,
     address: userData.address,
     subscriptions: [
       {
@@ -21,14 +21,22 @@ exports.createUser = async (userData) => {
   return await user.save();
 };
 
-exports.getUserById = async (id) => {
-  return await User.findById(id);
+exports.getUserById = async (userId) => {
+  return await User.findById(userId);
 };
 
-exports.updateUserById = async (id, userData) => {
-  return await User.findByIdAndUpdate(id, userData, { new: true });
+exports.updateUserById = async (userId, userData) => {
+  return await User.findByIdAndUpdate(userId, userData, { new: true });
 };
 
-exports.deleteUserById = async (id) => {
-  return await User.findByIdAndDelete(id);
+exports.deleteUserById = async (userId) => {
+  return await User.findByIdAndDelete(userId);
+};
+
+exports.verifyUserExists = async (userId) => {
+  const existingUser = await User.findById(userId);
+  if (existingUser) {
+    return true;
+  }
+  return false;
 };
