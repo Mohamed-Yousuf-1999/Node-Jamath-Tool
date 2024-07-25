@@ -5,6 +5,14 @@ exports.getSubscriptions = async () => {
 };
 
 exports.createSubscription = async (subscriptionData) => {
+  const latestSubscription = await Subscription.findOne().sort({
+    createdAt: -1,
+  });
+
+  if (latestSubscription) {
+    latestSubscription.isActive = false;
+    await latestSubscription.save();
+  }
   const subscription = new Subscription(subscriptionData);
   return await subscription.save();
 };
@@ -21,6 +29,15 @@ exports.deleteSubscription = async (subscriptionId) => {
   return await Subscription.findByIdAndDelete(subscriptionId);
 };
 
+const subscriptionById = async (subscriptionId) => {
+  const subscription = await Subscription.findById(subscriptionId);
+  return subscription;
+};
+
 exports.verifySubscriptionExists = async (subscriptionId) => {
-  return await Subscription.findById(subscriptionId);
+  return await subscriptionById(subscriptionId);
+};
+
+exports.verifySubscriptionActive = async (subscriptionId) => {
+  return await subscriptionById(subscriptionId);
 };
