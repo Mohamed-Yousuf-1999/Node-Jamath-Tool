@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const subscriptionManagementSchema = new mongoose.Schema(
+const subscriptionSchema = new mongoose.Schema(
   {
     year: {
       type: Number,
@@ -21,5 +21,5 @@ const subscriptionManagementSchema = new mongoose.Schema(
   }
 );
 
-const Subscription = mongoose.model("User", subscriptionManagementSchema);
+const Subscription = mongoose.model("Subscription", subscriptionSchema);
 module.exports = Subscription;
