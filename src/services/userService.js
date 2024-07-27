@@ -32,7 +32,7 @@ exports.getAllUsers = async () => {
     });
 
     return {
-      id: user._id,
+      userId: user._id,
       name: user.name,
       age: age,
       fatherName: user.fatherName,
